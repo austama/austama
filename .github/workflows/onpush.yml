@@ -1,0 +1,16 @@
+name: austama
+
+on:
+  push:
+    path-ignore:
+      - 'README.md'
+
+jobs:
+  build-pdf:
+    runs-on: aergus/latex
+    strategy:
+      max-parallel: 4
+    steps:
+      - name: compile
+        run: |
+          gmake pdf

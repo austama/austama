@@ -1,0 +1,17 @@
+image: aergus/latex
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - gmake pdf
+  only:
+    - master
+  artifacts:
+    name: pdf
+    paths:
+      - austama.pdf
+    expire_in: 2 days
+    
