@@ -1,1 +1,1 @@
-include ../../mk/testimony.mk
+include ../../mk/testimony2.mk

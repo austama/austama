@@ -29,11 +29,18 @@ $(OUTPUT)/header: $(OUTPUT)
 	test -f ../../templates/header_$(LANG).tex \
 		&& cp ../../templates/header_$(LANG).tex $@
 
+$(OUTPUT)/common: $(OUTPUT)
+	test -f ../../templates/common.tex \
+		&& cp ../../templates/common.tex $@
+
 $(OUTPUT)/content: $(OUTPUT)
 	test -f testimony_$(LANG).tex \
 		&& cp testimony_$(LANG).tex $@
 
-$(OUTPUT)/testimony.pdf: $(OUTPUT)/picture.jpg $(OUTPUT)/austama $(OUTPUT)/header $(OUTPUT)/content $(OUTPUT)/template.tex $(OUTPUT)/testimony.tex
+$(OUTPUT)/metadata: $(OUTPUT)
+	touch $@
+
+$(OUTPUT)/testimony.pdf: $(OUTPUT)/picture.jpg $(OUTPUT)/austama $(OUTPUT)/header $(OUTPUT)/content $(OUTPUT)/template.tex $(OUTPUT)/testimony.tex $(OUTPUT)/common $(OUTPUT)/metadata
 	cd $(OUTPUT) \
 		&& pdflatex $(PDFLATEX_ARGS) testimony
 
