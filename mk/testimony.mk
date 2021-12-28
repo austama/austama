@@ -1,83 +1,117 @@
-LANG ?= fr
+DEFAULT_LANGUAGE = fr
+LANGUAGE ?= $(DEFAULT_LANGUAGE)
 OUTPUT = output
+OUTPUT_LANGUAGE = $(OUTPUT)/$(LANGUAGE)
 
 PDFLATEX_ARGS = 
 
-all: $(OUTPUT)/testimony_$(LANG).pdf
+all: $(OUTPUT)/testimony_$(LANGUAGE).pdf images
 
 $(OUTPUT):
-	mkdir $@
+	mkdir -p $@
 
-$(OUTPUT)/picture.jpg: $(OUTPUT)
+$(OUTPUT_LANGUAGE): $(OUTPUT)
+	mkdir -p $@
+
+$(OUTPUT_LANGUAGE)/picture.jpg: $(OUTPUT_LANGUAGE)
 	test -f picture.jpg \
 		&& cp picture.jpg $@
 
-$(OUTPUT)/template.tex: $(OUTPUT)
+$(OUTPUT_LANGUAGE)/template.tex: $(OUTPUT_LANGUAGE)
 	test -f ../../templates/template.tex \
 		&& cp ../../templates/template.tex $@
 
-$(OUTPUT)/testimony.tex: $(OUTPUT)
+$(OUTPUT_LANGUAGE)/testimony.tex: $(OUTPUT_LANGUAGE)
 	test -f testimony.tex \
 		&& cp testimony.tex $@ \
 		|| cp ../../templates/testimony.tex $@
 
-$(OUTPUT)/austama: $(OUTPUT)
-	test -f ../../templates/austama_$(LANG).tex \
-		&& cp ../../templates/austama_$(LANG).tex $@
+$(OUTPUT_LANGUAGE)/austama: $(OUTPUT_LANGUAGE)
+	test -f ../../templates/austama.tex \
+		&& cp ../../templates/austama.tex $@
 
-$(OUTPUT)/header: $(OUTPUT)
-	test -f ../../templates/header_$(LANG).tex \
-		&& cp ../../templates/header_$(LANG).tex $@
+$(OUTPUT_LANGUAGE)/header: $(OUTPUT_LANGUAGE)
+	test -f ../../templates/header_$(LANGUAGE).tex \
+		&& cp ../../templates/header_$(LANGUAGE).tex $@
 
-$(OUTPUT)/common: $(OUTPUT)
+$(OUTPUT_LANGUAGE)/common: $(OUTPUT_LANGUAGE)
 	test -f ../../templates/common.tex \
 		&& cp ../../templates/common.tex $@
 
-$(OUTPUT)/content: $(OUTPUT)
-	test -f testimony_$(LANG).tex \
-		&& cp testimony_$(LANG).tex $@
+$(OUTPUT_LANGUAGE)/metadata: $(OUTPUT_LANGUAGE)
+	test -f metadata.tex \
+		&& cp metadata.tex $@
 
-$(OUTPUT)/metadata: $(OUTPUT)
-	touch $@
+$(OUTPUT_LANGUAGE)/content: $(OUTPUT_LANGUAGE)
+	test -f testimony_$(LANGUAGE).tex \
+		&& cp testimony_$(LANGUAGE).tex $@
 
-$(OUTPUT)/testimony.pdf: $(OUTPUT)/picture.jpg $(OUTPUT)/austama $(OUTPUT)/header $(OUTPUT)/content $(OUTPUT)/template.tex $(OUTPUT)/testimony.tex $(OUTPUT)/common $(OUTPUT)/metadata
-	cd $(OUTPUT) \
+$(OUTPUT_LANGUAGE)/testimony.pdf: $(OUTPUT_LANGUAGE)/picture.jpg $(OUTPUT_LANGUAGE)/austama $(OUTPUT_LANGUAGE)/header $(OUTPUT_LANGUAGE)/metadata $(OUTPUT_LANGUAGE)/content $(OUTPUT_LANGUAGE)/template.tex $(OUTPUT_LANGUAGE)/testimony.tex $(OUTPUT_LANGUAGE)/common
+	cd $(OUTPUT_LANGUAGE) \
 		&& pdflatex $(PDFLATEX_ARGS) testimony
 
-$(OUTPUT)/testimony_$(LANG).pdf: $(OUTPUT)/testimony.pdf
-	cp $(OUTPUT)/testimony.pdf $@
+$(OUTPUT)/testimony_$(LANGUAGE).pdf: $(OUTPUT_LANGUAGE)/testimony.pdf
+	cp $(OUTPUT_LANGUAGE)/testimony.pdf $@
 
-.PHONY += clean-testimony
-clean-testimony:
-	-rm $(OUTPUT)/testimony.tex
+# images generator
+.PHONY += images
+images: $(OUTPUT_LANGUAGE)/testimony.pdf png jpeg
 
+.PHONY += png
+png: $(OUTPUT)/testimony_$(LANGUAGE).png
+$(OUTPUT)/testimony_$(LANGUAGE).png:
+	pdftopng -f 1 -l 1 $(OUTPUT_LANGUAGE)/testimony.pdf - > $@
+
+.PHONY += jpeg
+jpeg: $(OUTPUT)/testimony_$(LANGUAGE).jpeg
+$(OUTPUT)/testimony_$(LANGUAGE).jpeg: $(OUTPUT)/testimony_$(LANGUAGE).png
+	convert $(OUTPUT)/testimony_$(LANGUAGE).png $(OUTPUT)/testimony_$(LANGUAGE).jpeg
+
+# cleanup
 .PHONY += clean-austama
 clean-austama:
-	-rm $(OUTPUT)/austama
+	-rm $(OUTPUT_LANGUAGE)/austama
 
 .PHONY += clean-header
 clean-header:
-	-rm $(OUTPUT)/header
+	-rm $(OUTPUT_LANGUAGE)/header
+
+.PHONY += clean-metadata
+clean-metadata:
+	-rm $(OUTPUT_LANGUAGE)/metadata
 
 .PHONY += clean-content
 clean-content:
-	-rm $(OUTPUT)/content
+	-rm $(OUTPUT_LANGUAGE)/content
+	-rm $(OUTPUT_LANGUAGE)/content.aux
+
+clean-template:
+	-rm $(OUTPUT_LANGUAGE)/template.tex
+
+clean-picture:
+	-rm $(OUTPUT_LANGUAGE)/picture.jpg
+
+clean-testimony:
+	-rm $(OUTPUT_LANGUAGE)/testimony.tex
+
+clean-common:
+	-rm $(OUTPUT_LANGUAGE)/common
 
 .PHONY += clean-files
-clean-files: clean-austama clean-header clean-content
+clean-files: clean-austama clean-header clean-metadata clean-content clean-template clean-picture clean-testimony clean-common
 
 .PHONY += clean-garbage
 clean-garbage:
-	-rm $(OUTPUT)/testimony.snm
-	-rm $(OUTPUT)/testimony.toc
-	-rm $(OUTPUT)/testimony.nav
-	-rm $(OUTPUT)/testimony.out
-	-rm $(OUTPUT)/testimony.aux
-	-rm $(OUTPUT)/testimony.log
+	-rm $(OUTPUT_LANGUAGE)/testimony.snm
+	-rm $(OUTPUT_LANGUAGE)/testimony.toc
+	-rm $(OUTPUT_LANGUAGE)/testimony.nav
+	-rm $(OUTPUT_LANGUAGE)/testimony.out
+	-rm $(OUTPUT_LANGUAGE)/testimony.aux
+	-rm $(OUTPUT_LANGUAGE)/testimony.log
 
 .PHONY += clean-pdf
 clean-pdf:
-	-rm $(OUTPUT)/*.pdf
+	-rm $(OUTPUT_LANGUAGE)/*.pdf
 
 .PHONY += clean
 clean: clean-files clean-garbage clean-pdf

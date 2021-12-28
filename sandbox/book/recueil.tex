@@ -1,0 +1,68 @@
+\documentclass[a4paper]{book}
+\usepackage[english,icelandic]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[strings]{underscore}
+\usepackage{multicol}
+\usepackage{ragged2e}
+\usepackage{graphicx}
+\usepackage{qrcode}
+\usepackage{blindtext}
+\usepackage{hyperref}
+\usepackage{keyval}
+\usepackage{datetime}
+\usepackage{translations}
+\usepackage{xkeyval}
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  left=15mm,
+  right=15mm,
+  top=20mm,
+  bottom=20mm
+}
+
+\def\VERYHuge{}
+\def\testimonyNormal{}
+
+\newcommand{\ice}{\fontencoding{T1}\selectfont\selectlanguage{icelandic}}
+\newcommand{\testimony}[7]{
+  \raggedright
+  \section*{#1\footnote{\href{#7}{#7}}}
+  %% \begin{itemize}
+  %%   \item \GetTranslation{Age}: {#3}
+  %%   \item \GetTranslation{Location}: {#2}
+  %%   \item \GetTranslation{Injection(s)}: {#4}
+  %%   \item \GetTranslation{Dose(s)}: {#5}
+  %%   \item \GetTranslation{Adverse Events and Reactions}: {#6}
+  %% \end{itemize}
+  % \justifying
+  % \setlength{\parindent}{0.25cm}
+  %  \vspace{0.25cm}
+  %  \qrcode[height=3cm]{#7} \\
+  %  \vspace{0.25cm}
+  \justifying
+}
+
+\newcommand{\test}[1] {
+  \input{src/#1/metadata}
+  \begin{center}
+    \includegraphics[width=\linewidth]{src/#1/picture.jpg}
+  \end{center}
+  \input{src/#1/testimony_en}
+}
+
+
+% \setlength{\hoffset}{0cm}
+% \setlength{\oddsidemargin}{0mm}
+% \setlength{\textwidth}{14cm}
+% \setlength{\marginparsep}{0cm}
+% \setlength{\marginparwidth}{0cm}
+
+\begin{document}
+\small
+\justifying
+\begin{multicols}{3}
+  \input{generate}
+\end{multicols}
+\end{document}
