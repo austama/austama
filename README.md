@@ -16,15 +16,25 @@ le domaine publique. Les témoignages appartiennent aux victimes.
 ## Prérequis
 
 Ce code est utilisable avec les outils GNU/Linux/Unix de base. Il a été conçu
-pour être flexible. Voici la liste des outils utilisés:
+pour être flexible. Voici la liste des outils utilisés (packages debian):
 
- - pdflatex
- 
- - pdfjam
- 
- - convert (ImageMagick)
- 
- - pdftopng
+ - curl 
+ - git 
+ - imagemagick
+ - info-beamer 
+ - make 
+ - texlive-extra-utils 
+ - texlive-font-utils 
+ - texlive-fonts-extra
+ - texlive-lang-all 
+ - texlive-latex-base 
+ - wiki2beamer 
+
+Vous pouvez automatiquement les installer en utilisant la commande:
+
+```sh
+make bootstrap
+```
 
 ## Aide
 
@@ -60,6 +70,21 @@ défaut, cette variable est configurée avec la langue `fr`.
 
 Les fichiers produits se trouvent dans les répertoires `output`.
 
+## Docker
+
+Vous pouvez compiler une image docker automatiquement en utilisant la commande
+suivante:
+
+```sh
+make docker
+```
+
+Pour l'utiliser:
+
+```sh
+docker run -it austama bash
+```
+
 ## Liste des tâches
 
  - [x] Création du projet en open-source
@@ -76,6 +101,7 @@ Les fichiers produits se trouvent dans les répertoires `output`.
    - [ ] (anglais)  https://thecovidworld.com/testimonials
    - [ ] (français) https://effets-secondaires-vaccins-covid.org/témoignage
    - [ ] (allemand) https://www.direktdemokratisch.jetzt/impfopfer-archiv/
+   - [ ] (allemand) https://www.mwgfd.de/meldestelle-impfschaeden/
 
  - [ ] Support Linguistique
    - [x] Support de l'anglais

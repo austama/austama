@@ -60,7 +60,7 @@ images: $(OUTPUT_LANGUAGE)/testimony.pdf png jpeg
 .PHONY += png
 png: $(OUTPUT)/testimony_$(LANGUAGE).png
 $(OUTPUT)/testimony_$(LANGUAGE).png:
-	pdftopng -f 1 -l 1 $(OUTPUT_LANGUAGE)/testimony.pdf - > $@
+	convert $(OUTPUT_LANGUAGE)/testimony.pdf $@
 
 .PHONY += jpeg
 jpeg: $(OUTPUT)/testimony_$(LANGUAGE).jpeg
