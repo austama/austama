@@ -76,6 +76,7 @@ Les fichiers produits se trouvent dans les répertoires `output`.
    - [ ] (anglais)  https://thecovidworld.com/testimonials
    - [ ] (français) https://effets-secondaires-vaccins-covid.org/témoignage
    - [ ] (allemand) https://www.direktdemokratisch.jetzt/impfopfer-archiv/
+   - [ ] (allemand) https://www.mwgfd.de/meldestelle-impfschaeden/
 
  - [ ] Support Linguistique
    - [x] Support de l'anglais
