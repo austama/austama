@@ -13,7 +13,7 @@ $(OUTPUT)/revision: $(OUTPUT)
 	git rev-parse --short HEAD > $@
 
 $(OUTPUT)/lang: $(OUTPUT)
-	echo $${LANG:-en} > $@
+	echo $${LANGUAGE:-en} > $@
 
 $(OUTPUT)/release.tex: $(OUTPUT)
 	cp release.tex $@
